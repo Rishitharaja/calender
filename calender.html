@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Year Calendar</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f0f8ff; padding: 20px; }
+    h1 { text-align: center; color: #007bff; }
+    details { margin: 10px auto; max-width: 600px; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    summary { font-size: 18px; font-weight: bold; cursor: pointer; color: #007bff; }
+    .days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-top: 10px; text-align: center; }
+    .day-name { font-weight: bold; color: #555; }
+    .day { padding: 6px; background: #e6f3ff; border-radius: 4px; }
+    .today { background: #28a745; color: white; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Calendar - 2025</h1>
+  <div id="calendar"></div>
+
+  <script>
+    // JSON data inside same file
+    let data = {
+      "weekDays": ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
+      "months": [
+        "January","February","March","April","May","June",
+        "July","August","September","October","November","December"
+      ]
+    };
+
+    let months = data.months;
+    let weekDays = data.weekDays;
+    let today = new Date();  // detects current system date
+    let container = document.getElementById("calendar");
+
+    for (let m = 0; m < months.length; m++) {
+      let monthDetail = document.createElement("details");
+      if (m === today.getMonth()) monthDetail.open = true;  // open current month
+
+      let summary = document.createElement("summary");
+      summary.textContent = months[m];
+      monthDetail.appendChild(summary);
+
+      let daysDiv = document.createElement("div");
+      daysDiv.className = "days";
+
+      // Add week headers
+      for (let d = 0; d < weekDays.length; d++) {
+        let dn = document.createElement("div");
+        dn.className = "day-name";
+        dn.textContent = weekDays[d];
+        daysDiv.appendChild(dn);
+      }
+
+      // Calculate days in this month
+      let daysInMonth = new Date(today.getFullYear(), m + 1, 0).getDate();
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        let dd = document.createElement("div");
+        dd.className = "day";
+        // highlight today
+        if (d === today.getDate() && m === today.getMonth()) {
+          dd.className += " today";
+        }
+        dd.textContent = d;
+        daysDiv.appendChild(dd);
+      }
+
+      monthDetail.appendChild(daysDiv);
+      container.appendChild(monthDetail);
+    }
+  </script>
+</body>
+</html>
